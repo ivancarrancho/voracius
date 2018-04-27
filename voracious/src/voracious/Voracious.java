@@ -33,7 +33,7 @@ public class Voracious {
         System.out.println("Ingrese la cantidad de votantes\n ");
         v = reader.nextLine();
 
-        System.out.println("Ingrese el candidato corrupto \n ");
+        System.out.println("Ingrese el candidato que se verá favorecido por la repartición de tamales \n ");
         c_winner = reader.nextLine();
         // armar arreglo antes de escoger ganador
 
@@ -43,6 +43,10 @@ public class Voracious {
             Integer.parseInt(c);
             Integer.parseInt(v);
             Integer.parseInt(c_winner);
+            if (Integer.parseInt(c_winner) > (Integer.parseInt(c) - 1)) {
+                System.out.println("Esta fuera del rango, la última posición del candidato es " + (Integer.parseInt(c) - 1));
+                return;
+            }
         } catch (NumberFormatException e) {
            System.out.println("No es un entero");
            return;
@@ -89,7 +93,7 @@ public class Voracious {
 
 
         for (int j = 0; j < multi[0].length; j++) {
-            System.out.println("Ingrese cantidad disponible para sobornar el votante\n ");
+            System.out.println(" \nIngrese cantidad de tamales disponible para sobornar el votante " + j);
             try{
                 cost_votant = Double.parseDouble(reader.nextLine());
             } catch (NumberFormatException e) {
@@ -100,7 +104,9 @@ public class Voracious {
             multi[new_c + 2][j] = cost_votant * (1 - multi[Integer.parseInt(c_winner)][j]);
         }
 
-        System.out.print("\n Votantes         " + Arrays.toString(vote_list));
+        System.out.println(" \n \n ---'El * indica el votante por el cual vamos a repartir tamales'---");
+        System.out.print("\n Votantes             " + Arrays.toString(vote_list));
+        System.out.println("");
         for (int i = 0; i < multi.length; i++) {
             if (i < new_c) {
                 if (Integer.parseInt(c_winner) == i) {
@@ -109,33 +115,36 @@ public class Voracious {
                     System.out.print("\n Candidato " + i + ":         ");
                 }
             } else if (new_c == i) {
-                System.out.print("\n Sumatoria:           ");
+                System.out.println("");
+                System.out.print("-------------------------------------------------------- ");
+                System.out.println("");
+                System.out.print("Sumatoria:            ");
             } else if (new_c + 1 == i) {
-                System.out.print("\n Costo:               ");
+                System.out.print("\n Tamales:             ");
             } else {
-                System.out.print("\n Costo x Prob:        ");
+                System.out.print("\n Tamales x Prob:      ");
             }
             for (int j = 0; j < multi[0].length; j++) {
                 System.out.print(round(multi[i][j], 2) + " | ");
             }
+            System.out.println("");
         }
+
+        Arrays.sort(multi[new_c + 2]);
+
         for (int j = 0; j < ((int) Math.ceil(Integer.parseInt(v) * person_percent)); j++) {
-            result[j] = round(multi[new_c + 2][j], 1);
-            total_result = total_result + round(multi[new_c + 2][j], 1);
+            result[j] = round(multi[new_c + 2][j], 2);
+            total_result = total_result + round(multi[new_c + 2][j], 2);
         }
 
-        Arrays.sort(result);
-
-        // for (int j = 0; j < multi[new_c + 2].length; j++) {
-        //     System.out.println("m******************* ");
-        //     System.out.print(multi[new_c + 2][j]);
-        // }
 
         for (int j = 0; j < result.length; j++) {
-            System.out.print("\n" + " | " +result[j] + " | ");
+            System.out.print("\n" + j + "." + " | " +result[j] + " | ");
         }
 
-        System.out.print("\n Sumatoria total" + round(total_result, 1) + "\n");
+        System.out.println("");
+        System.out.print("\n El gasto minímo para asegurar el 70% de votos por el candidato "+ c_winner +" es de " + round(total_result, 1) + " Tamales \n");
+        System.out.println("");
 
     }
 
